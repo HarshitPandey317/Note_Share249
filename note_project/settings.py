@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+import shutil
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -53,10 +54,18 @@ TEMPLATES = [
 WSGI_APPLICATION = 'note_project.wsgi.application'
 
 
+SQLITE_PATH = BASE_DIR / 'db.sqlite3'
+
+if os.environ.get('VERCEL'):
+    runtime_db = Path('/tmp/db.sqlite3')
+    if not runtime_db.exists() and SQLITE_PATH.exists():
+        shutil.copyfile(SQLITE_PATH, runtime_db)
+    SQLITE_PATH = runtime_db
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': SQLITE_PATH,
     }
 }
 
