@@ -1,0 +1,28 @@
+{% extends 'notes/base.html' %}
+
+{% block title %}Sign Up | NoteShare{% endblock %}
+
+{% block content %}
+<section class="auth-layout">
+    <div class="auth-copy">
+        <p class="eyebrow">Create account</p>
+        <h1>Build a cleaner place for class notes.</h1>
+        <p class="lede">Every student gets their own login, while each group stays protected by its shared password.</p>
+    </div>
+
+    <div class="panel form-panel">
+        <h2>Sign up</h2>
+        <form method="post" class="stacked-form">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            {% for field in form %}
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {{ field.errors }}
+            {% endfor %}
+            <button class="button primary full" type="submit">Create account</button>
+        </form>
+        <p class="form-note">Already registered? <a href="{% url 'login' %}">Log in</a></p>
+    </div>
+</section>
+{% endblock %}

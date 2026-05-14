@@ -1,0 +1,25 @@
+{% extends 'notes/base.html' %}
+
+{% block title %}Add Subject | NoteShare{% endblock %}
+
+{% block content %}
+<section class="form-shell">
+    <a class="back-link" href="{% url 'group_detail' group.id %}">Back to {{ group.name }}</a>
+    <div class="panel form-panel">
+        <p class="eyebrow">Subject setup</p>
+        <h1>Add a subject</h1>
+        <p class="lede">Subjects keep notes organized by class, module, or exam unit.</p>
+
+        <form method="post" class="stacked-form">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            {% for field in form %}
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {{ field.errors }}
+            {% endfor %}
+            <button class="button primary full" type="submit">Create subject</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

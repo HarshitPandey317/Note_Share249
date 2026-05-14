@@ -1,0 +1,25 @@
+{% extends 'notes/base.html' %}
+
+{% block title %}Upload Note | NoteShare{% endblock %}
+
+{% block content %}
+<section class="form-shell">
+    <a class="back-link" href="{% url 'group_detail' subgroup.group.id %}">Back to {{ subgroup.group.name }}</a>
+    <div class="panel form-panel">
+        <p class="eyebrow">{{ subgroup.name }}</p>
+        <h1>Upload a note</h1>
+        <p class="lede">Add a descriptive title so classmates know what they are opening.</p>
+
+        <form method="post" enctype="multipart/form-data" class="stacked-form">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            {% for field in form %}
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {{ field.errors }}
+            {% endfor %}
+            <button class="button primary full" type="submit">Upload file</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

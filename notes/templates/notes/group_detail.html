@@ -1,0 +1,57 @@
+{% extends 'notes/base.html' %}
+
+{% block title %}{{ group.name }} | NoteShare{% endblock %}
+
+{% block content %}
+<section class="page-head">
+    <div>
+        <a class="back-link" href="{% url 'group_list' %}">Back to dashboard</a>
+        <p class="eyebrow">Private group</p>
+        <h1>{{ group.name }}</h1>
+        <p class="lede">{{ group.members.count }} members learning together.</p>
+    </div>
+    {% if user == group.creator %}
+        <a class="button primary" href="{% url 'create_subgroup' group.id %}">Add subject</a>
+    {% endif %}
+</section>
+
+<section class="subject-stack">
+    {% for subgroup in subgroups %}
+        <article class="subject-panel">
+            <div class="subject-head">
+                <div>
+                    <p class="eyebrow">Subject</p>
+                    <h2>{{ subgroup.name }}</h2>
+                </div>
+                <a class="button small" href="{% url 'upload_note' subgroup.id %}">Upload note</a>
+            </div>
+
+            <div class="note-list">
+                {% for note in subgroup.notes.all %}
+                    <a class="note-row" href="{{ note.file.url }}" target="_blank" rel="noreferrer">
+                        <span class="file-badge">FILE</span>
+                        <span>
+                            <strong>{{ note.title }}</strong>
+                            <small>Uploaded by {{ note.uploader.username }} · {{ note.timestamp|date:"M d, Y" }}</small>
+                        </span>
+                    </a>
+                {% empty %}
+                    <div class="empty-state compact">
+                        <h3>No notes here yet</h3>
+                        <p>Upload the first file for this subject.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </article>
+    {% empty %}
+        <div class="empty-state">
+            <h3>No subjects created</h3>
+            {% if user == group.creator %}
+                <p>Add subjects such as Math, DSA, DBMS, or Physics to organize notes.</p>
+            {% else %}
+                <p>The group creator has not added subjects yet.</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+</section>
+{% endblock %}

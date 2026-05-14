@@ -1,0 +1,67 @@
+{% extends 'notes/base.html' %}
+
+{% block title %}Dashboard | NoteShare{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div>
+        <p class="eyebrow">Study groups</p>
+        <h1>Your shared academic workspace</h1>
+        <p class="lede">Create private groups, organize subjects, and keep every note where your classmates can find it.</p>
+    </div>
+    <a class="button primary" href="{% url 'create_group' %}">Create group</a>
+</section>
+
+<section class="dashboard-grid">
+    <div class="panel">
+        <div class="section-head">
+            <div>
+                <p class="eyebrow">Available spaces</p>
+                <h2>Groups</h2>
+            </div>
+            <span class="counter">{{ groups|length }}</span>
+        </div>
+
+        <div class="card-grid">
+            {% for group in groups %}
+                <a class="group-card" href="{% url 'group_detail' group.id %}">
+                    <span class="card-icon">{{ group.name|first|upper }}</span>
+                    <span class="card-body">
+                        <strong>{{ group.name }}</strong>
+                        <small>{{ group.members.count }} members · {{ group.subgroups.count }} subjects</small>
+                    </span>
+                    <span class="arrow">Open</span>
+                </a>
+            {% empty %}
+                <div class="empty-state">
+                    <h3>No groups yet</h3>
+                    <p>Create the first study group and share the password with your classmates.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <aside class="panel">
+        <div class="section-head">
+            <div>
+                <p class="eyebrow">Your work</p>
+                <h2>My Contributions</h2>
+            </div>
+        </div>
+
+        <div class="activity-list">
+            {% for note in contributions %}
+                <a class="activity-item" href="{{ note.file.url }}" target="_blank" rel="noreferrer">
+                    <strong>{{ note.title }}</strong>
+                    <small>{{ note.subgroup.group.name }} · {{ note.subgroup.name }}</small>
+                </a>
+            {% empty %}
+                <div class="empty-state compact">
+                    <h3>No uploads yet</h3>
+                    <p>Your recent notes will appear here after you upload them.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </aside>
+</section>
+{% endblock %}
