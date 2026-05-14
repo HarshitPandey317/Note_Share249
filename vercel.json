@@ -1,4 +1,5 @@
 {
+  "buildCommand": "python manage.py collectstatic --noinput",
   "builds": [
     {
       "src": "note_project/wsgi.py",
@@ -6,10 +7,6 @@
     }
   ],
   "routes": [
-    {
-      "src": "/static/notes/(.*)",
-      "dest": "/notes/static/notes/$1"
-    },
     {
       "src": "/(.*)",
       "dest": "note_project/wsgi.py"
